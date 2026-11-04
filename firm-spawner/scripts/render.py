@@ -134,12 +134,12 @@ def main(argv=None):
             dst = os.path.join(a.out, rel)
             os.makedirs(os.path.dirname(dst), exist_ok=True)
             try:
-                with open(src, encoding="utf-8") as f:
+                with open(src, encoding="utf-8", newline='') as f:
                     text = f.read()
             except UnicodeDecodeError:
                 shutil.copy2(src, dst)
                 continue
-            with open(dst, "w", encoding="utf-8") as f:
+            with open(dst, "w", encoding="utf-8", newline='') as f:
                 f.write(render_text(text, resolved, missing))
             shutil.copymode(src, dst)
             rendered += 1
