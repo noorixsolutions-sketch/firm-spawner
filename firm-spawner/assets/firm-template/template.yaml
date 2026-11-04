@@ -1,0 +1,42 @@
+# template.yaml: the configurable surface of the firm template.
+# Every double-brace placeholder anywhere in this template resolves against this schema
+# plus values/<firm>.yaml. Nothing outside this schema may be set by the model.
+# type: string|int|bool|list|map   required: true|false   default: <value>
+firm:
+  id:           { type: string, required: true, pattern: "^[a-z][a-z0-9-]{2,30}$" }
+  name:         { type: string, required: true }
+  purpose:      { type: string, required: true }
+  owner_gmail:  { type: string, required: true }
+  repo:         { type: string, required: true }   # github "owner/firm-<id>"
+  commit:       { type: string, default: "main" }  # pin to a SHA at publish time
+policy:
+  allow_paid:   { type: bool, default: false }     # hard-coded free-only; true is rejected
+state:
+  state_bucket:  { type: string, required: true }  # e.g. hf://buckets/<id>/state or file:///state
+  models_bucket: { type: string, default: "" }     # separate cache for model weights
+inference:
+  enabled:      { type: bool, default: false }
+  backend:      { type: string, default: "llama.cpp" }
+  model_repo:   { type: string, default: "none" }
+  model_file:   { type: string, default: "none" }
+  llama_cpp_ref: { type: string, default: "" }      # commit SHA or tag; required when enabled
+  ctx:          { type: int, default: 8192 }
+model_plane:
+  backends:     { type: list, default: [] }        # evidence-backed provider ids, in routing order
+harness:
+  runtime:      { type: string, default: "prime-agent" }   # as found in inventory
+  base_url:     { type: string, default: "http://harness:8080" }
+deploy:
+  control_target:   { type: string, default: "hf-space" }  # hf-space | local
+  worker_targets:   { type: list,   default: ["kaggle"] }   # kaggle | colab | hf-job | local
+  colab_workers:    { type: int,    default: 0 }
+  kaggle_workers:   { type: int,    default: 1 }
+  kaggle_schedule:  { type: string, default: "0 */6 * * *" }
+  hf_space_hardware: { type: string, default: "cpu-basic" }
+  idle_exit_seconds: { type: int,    default: 900 }
+agents:
+  files:        { type: list, required: true }     # agent definition files, validated by validate.py
+plugins:
+  bindings:     { type: list, default: [] }        # plugin ids from catalogue/plugins.yaml
+secrets:
+  required:     { type: list, default: ["HF_TOKEN"] }   # NAMES only; values never appear here

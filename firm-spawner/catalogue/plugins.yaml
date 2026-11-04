@@ -1,0 +1,27 @@
+# Harness plugin catalogue. The firm harness is the only orchestrator; plugins expose capabilities.
+# Filled during the inventory stage (SKILL.md Stage 0) from the REAL interface of the
+# workspace reference harness (src/app/api/harness/firms/[firmId]). Every plugin below is
+# implemented by that harness and probed by the workspace E2E run:
+#   state.store            round-trips task files under STATE_DIR (queue/, EVENTS/, RUNS/)
+#   inference.openai_compat POST /v1/chat/completions backed by the workspace LLM SDK
+#   governance.human_gate  refuses constitution human_approval_required_for actions (422)
+# validate.py rejects any binding whose id is not listed here.
+plugins:
+  - id: state.store
+    version: 1.0.0
+    requires_capabilities: [state_storage]
+    permissions: [read_state, write_state]
+    secret_refs: []
+    health: "E2E: task files round-trip under STATE_DIR; EVENTS and RUNS records written by the harness"
+  - id: inference.openai_compat
+    version: 1.0.0
+    requires_capabilities: [inference]
+    permissions: [call_inference]
+    secret_refs: []
+    health: "E2E: one real chat completion via POST /v1/chat/completions (workspace model plane)"
+  - id: governance.human_gate
+    version: 1.0.0
+    requires_capabilities: [control_plane_hosting]
+    permissions: [gate_external_action]
+    secret_refs: []
+    health: "E2E: a task whose payload.action is in human_approval_required_for is refused with 422 and lands in queue/failed"

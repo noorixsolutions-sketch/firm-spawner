@@ -1,0 +1,15 @@
+# pattern.yaml: the fixed deployment order. Follow exactly. Each step has a gate
+# (human approval) where it creates or changes something outside this repo.
+pattern:
+  - step: resolve            # merge template.yaml + values -> concrete config (scripts/render.py)
+  - step: render             # fill placeholders in every asset; fail on any leftover
+  - step: validate           # scripts/validate.py + scripts/scan_secrets.py; hard fail stops here
+  - step: approve            # human approves topology, providers, limits, permissions   [GATE]
+  - step: publish            # push rendered firm repo (no secrets) to GitHub            [GATE]
+  - step: provision_storage  # create state (and models) bucket                          [GATE]
+  - step: build_images       # platform builds Dockerfiles (HF Space) or CI builds       [GATE]
+  - step: deploy_control     # gateway + harness (+ ui) on control target                [GATE]
+  - step: deploy_workers     # notebooks to Kaggle/Colab, jobs to HF, compose to local   [GATE]
+  - step: deploy_inference   # only when inference.enabled                                [GATE]
+  - step: seed               # constitution + agents + plugin bindings into /state
+  - step: verify             # probe each asset, write manifest.json

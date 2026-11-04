@@ -1,0 +1,38 @@
+firm:
+  id: lumen-research
+  name: Lumen Research Co
+  purpose: 'Answer small research questions with a tiny open model, review every answer, and archive the results.'
+  owner_gmail: lumen.research.co@gmail.com
+  repo: your-github-user/firm-lumen-research
+  commit: main
+policy:
+  allow_paid: false
+state:
+  state_bucket: 'file:///home/z/my-project/workspaces/lumen-research/state'
+  models_bucket: ""
+inference:
+  enabled: true
+  backend: llama.cpp
+  model_repo: TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF
+  model_file: tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf
+  llama_cpp_ref: b12103
+  ctx: 8192
+model_plane:
+  backends: [workspace-llm]
+harness:
+  runtime: prime-agent
+  base_url: 'http://localhost:3000/api/harness/firms/lumen-research'
+deploy:
+  control_target: local
+  worker_targets: [local, kaggle]
+  colab_workers: 0
+  kaggle_workers: 1
+  kaggle_schedule: '0 */6 * * *'
+  hf_space_hardware: cpu-basic
+  idle_exit_seconds: 900
+agents:
+  files: [compliance.yaml, orchestrator.yaml, researcher.yaml]
+plugins:
+  bindings: [state.store, inference.openai_compat, governance.human_gate]
+secrets:
+  required: [HF_TOKEN]

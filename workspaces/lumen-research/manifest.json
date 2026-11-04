@@ -1,0 +1,44 @@
+{
+  "firm_id": "lumen-research",
+  "verified_at": "2026-11-04T10:23:25.431Z",
+  "commit": "9b4a8afb32f348eb5953af29bd71ab6fcc8deefa",
+  "assets": [
+    {
+      "name": "harness",
+      "target": "local (reference impl)",
+      "endpoint": "http://localhost:3000/api/harness/firms/lumen-research",
+      "health": "200"
+    },
+    {
+      "name": "worker-local",
+      "target": "local",
+      "result": "done"
+    },
+    {
+      "name": "worker-bare",
+      "target": "kaggle partition (notebook code path)",
+      "result": "done"
+    },
+    {
+      "name": "inference-model-plane",
+      "target": "workspace-llm",
+      "result": "real chat completion"
+    },
+    {
+      "name": "firm-inference (llama.cpp)",
+      "target": "authored image sources",
+      "result": "not exercised: no GPU/Docker in sandbox"
+    }
+  ],
+  "end_to_end": {
+    "task": "verify-1",
+    "result": "done"
+  },
+  "limits": [
+    "workspace model plane is internal to this sandbox",
+    "Kaggle/Colab/HF deploys are operator-gated"
+  ],
+  "mocked": [
+    "firm-harness is the workspace reference implementation, not the operator's Synapses-Firm harness"
+  ]
+}

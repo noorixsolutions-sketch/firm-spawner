@@ -1,0 +1,11 @@
+# Firm charter. Business content is model-authored per firm and lives ONLY in this
+# file and agents/*.yaml, never in images.
+firm_id: "lumen-research"
+name: "Lumen Research Co"
+purpose: "Answer small research questions with a tiny open model, review every answer, and archive the results."
+owner: "lumen.research.co@gmail.com"
+policy:
+  allow_paid: false
+  human_approval_required_for: [spend, external_publish, credential_change, destructive_action]
+runtime: "prime-agent"
+state_bucket: "file:///home/z/my-project/workspaces/lumen-research/state"

@@ -1,0 +1,11 @@
+# Harness plugin catalogue. The firm harness is the only orchestrator; plugins expose capabilities.
+# Fill this from the harness's real plugin interface during the inventory stage (SKILL.md Stage 0).
+# validate.py rejects any binding whose id is not listed here. Empty list = nothing is bindable yet.
+# Entry shape:
+#   - id: <namespace.name>
+#     version: <semver>
+#     requires_capabilities: [<capability ids>]
+#     permissions: [<permission names>]
+#     secret_refs: [<SECRET_NAMES>]
+#     health: <how it is probed>
+plugins: []

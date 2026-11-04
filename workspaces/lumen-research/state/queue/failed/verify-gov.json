@@ -1,0 +1,1 @@
+{"id": "verify-gov", "type": "job", "payload": {"action": "spend", "amount": 100, "note": "governance gate test"}, "attempts": 3, "created": "2026-11-04T10:23:16.842Z", "last_error": "HTTP Error 422: human approval required for action: spend", "worker": "lumen-research-local", "finished": "2026-11-04T10:23:18.931687+00:00"}

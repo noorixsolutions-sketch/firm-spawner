@@ -1,0 +1,104 @@
+// Firm Forge — company-spawner workspace
+// Firms, their agents, provider evidence records, operator decisions and test runs.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Firm {
+  id           String   @id @default(cuid())
+  firmId       String   @unique // slug used for workspace dirs and harness URLs
+  name         String
+  purpose      String
+  ownerGmail   String
+  repo         String // github "owner/firm-<id>", publish target
+  // state
+  stateBucket  String   @default("file:///state") // resolved to the workspace path at render time
+  // inference (llama.cpp self-host plane)
+  inferenceEnabled Boolean @default(true)
+  modelRepo    String   @default("TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF")
+  modelFile    String   @default("tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf")
+  llamaCppRef  String   @default("b12103")
+  ctx          Int      @default(8192)
+  // model plane (hosted API backends in routing order)
+  modelBackends Json    @default("[\"workspace-llm\"]")
+  // harness
+  harnessRuntime String @default("prime-agent")
+  // deploy
+  controlTarget  String @default("local") // hf-space | local
+  workerTargets  Json   @default("[\"local\",\"kaggle\"]") // kaggle | colab | hf-job | local
+  kaggleWorkers  Int    @default(1)
+  colabWorkers   Int    @default(0)
+  kaggleSchedule String @default("0 */6 * * *")
+  hfSpaceHardware String @default("cpu-basic")
+  idleExitSeconds Int   @default(900)
+  // plugins + secrets (NAMES only, never values)
+  pluginBindings Json   @default("[\"state.store\",\"inference.openai_compat\",\"governance.human_gate\"]")
+  secretsRequired Json  @default("[\"HF_TOKEN\"]")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  agents    Agent[]
+  runs      TestRun[]
+  decisions Decision[]
+}
+
+model Agent {
+  id        String @id @default(cuid())
+  firmId    String
+  fileName  String // e.g. "orchestrator.yaml" — file in constitution/agents/
+  agentId   String // id field inside the yaml
+  role      String
+  responsibilities Json @default("[]")
+  plugins   Json    @default("[]")
+  permissions Json  @default("[]")
+  reportsTo String  @default("human")
+  createdAt DateTime @default(now())
+  firm      Firm    @relation(fields: [firmId], references: [id], onDelete: Cascade)
+
+  @@unique([firmId, fileName])
+}
+
+model EvidenceRecord {
+  id           String  @id @default(cuid())
+  provider     String
+  capability   String // inference | state_storage | control_plane_hosting | batch_compute
+  execution    String // persistent_service | interactive_api | batch_worker | ephemeral_notebook
+  pricingModel String // free_forever | open_source_self_host | free_tier | trial | paid_only | discontinued
+  cardRequired Boolean @default(false)
+  computeCost  String  @default("none") // none | user_owned | paid
+  sourceUrl    String
+  verifiedAt   String // YYYY-MM-DD from the official source
+  termsExcerpt String
+  limits       Json    @default("[]")
+  restrictions Json    @default("[]")
+  createdAt    DateTime @default(now())
+}
+
+model Decision {
+  id         String   @id @default(cuid())
+  firmId     String
+  capability String
+  choice     String
+  evidence   String
+  verifiedAt String
+  decidedAt  DateTime @default(now())
+  firm       Firm     @relation(fields: [firmId], references: [id], onDelete: Cascade)
+}
+
+model TestRun {
+  id       String   @id @default(cuid())
+  firmDbId String
+  kind     String // e2e | selftest | build
+  status   String // pass | fail
+  steps    Json    // [{name, status, detail, ms}]
+  manifest Json?
+  summary  String?
+  createdAt DateTime @default(now())
+  firm     Firm     @relation(fields: [firmDbId], references: [id], onDelete: Cascade)
+}

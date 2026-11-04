@@ -1,0 +1,1 @@
+{"id": "verify-3", "type": "echo", "payload": {"note": "bare mode notebook path"}, "attempts": 0, "created": "2026-11-04T10:23:18.993Z", "result": {"echo": {"note": "bare mode notebook path"}, "task_id": "verify-3"}, "worker": "lumen-research-kaggle", "finished": "2026-11-04T10:23:19.413429+00:00"}

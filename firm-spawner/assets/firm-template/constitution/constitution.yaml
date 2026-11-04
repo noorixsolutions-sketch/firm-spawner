@@ -1,0 +1,11 @@
+# Firm charter. Business content is model-authored per firm and lives ONLY in this
+# file and agents/*.yaml, never in images.
+firm_id: "{{firm.id}}"
+name: "{{firm.name}}"
+purpose: "{{firm.purpose}}"
+owner: "{{firm.owner_gmail}}"
+policy:
+  allow_paid: {{policy.allow_paid}}
+  human_approval_required_for: [spend, external_publish, credential_change, destructive_action]
+runtime: "{{harness.runtime}}"
+state_bucket: "{{state.state_bucket}}"

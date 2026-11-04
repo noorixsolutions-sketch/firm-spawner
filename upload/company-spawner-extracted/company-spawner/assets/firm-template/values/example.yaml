@@ -1,0 +1,22 @@
+# Example values file: one firm. Names only for secrets.
+firm:
+  id: demo-inference-co
+  name: Demo Inference Co
+  purpose: Answer research questions with a small open model and archive the results.
+  owner_gmail: demo-inference-co@gmail.com
+  repo: your-github-user/firm-demo-inference-co
+state:
+  state_bucket: file:///state
+inference:
+  enabled: true
+  model_repo: example-org/example-model-GGUF
+  model_file: example-model.Q4_K_M.gguf
+deploy:
+  control_target: local
+  worker_targets: [kaggle, local]
+agents:
+  files: [orchestrator.yaml, researcher.yaml]
+plugins:
+  bindings: [state.store, inference.openai_compat]
+secrets:
+  required: [HF_TOKEN]

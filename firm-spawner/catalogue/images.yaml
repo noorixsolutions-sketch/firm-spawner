@@ -1,0 +1,83 @@
+# Infrastructure catalogue: the ONLY images a firm may use. Anything not listed is rejected.
+# status: authored  = built from assets/firm-template/images (this skill owns the source)
+#         unverified = source lives in the operator's own repos; usable only after the
+#                      inventory step confirms it and sets status: verified (see SKILL.md Stage 0)
+# digest is recorded in versions.lock at build time; mutable tags are never enough for publish.
+images:
+  - id: firm-worker
+    status: authored
+    source: assets/firm-template/images/worker
+    architectures: [linux/amd64, linux/arm64]
+    capabilities: [queue.consume]
+    deploys_to: [local, hf-space, hf-job, colab, kaggle]
+    env_required: [STATE_DIR]
+    env_optional: [FIRM_WORKER_ID, FIRM_IDLE_EXIT, HARNESS_BASE_URL, INFERENCE_URL, FIRM_PARTITION, STATE_PULL_CMD, STATE_PUSH_CMD, FIRM_MAX_ATTEMPTS]
+    secrets: []
+    health: "file STATE_DIR/HEALTH/worker.json refreshed each loop"
+    state_mount: /state
+  - id: firm-inference
+    status: authored
+    source: assets/firm-template/images/inference
+    architectures: [linux/amd64]
+    capabilities: [inference.openai_compat]
+    deploys_to: [local, hf-job, colab, kaggle]
+    gpu: required
+    env_required: [MODEL_REPO, MODEL_FILE]
+    env_optional: [FIRM_CTX, MODELS_DIR, LLAMA_CPP_REF, LLAMA_BIN]
+    secrets: [HF_TOKEN]
+    health: "GET :8000/health"
+    state_mount: /models
+  - id: firm-harness
+    status: verified
+    # Stage 0 inventory (2026-11-04, this workspace): the operator's Synapses-Firm harness
+    # source is NOT present in this workspace, so the harness slot is filled by the
+    # workspace reference implementation of the documented adapter contract:
+    #   GET  /health              -> 200 {status, firm, runtime, agents}
+    #   POST /v1/tasks/run        -> {"result": ...}; 422 on constitution policy refusal
+    #   POST /v1/chat/completions -> OpenAI-compatible model plane (workspace LLM SDK)
+    # config in: STATE_DIR/constitution/{constitution.yaml, agents/*.yaml, plugins/bindings.yaml}
+    # evidence: workspace E2E run (health probe, task round-trip, policy refusal, state readback)
+    source: "workspace reference harness: src/app/api/harness/firms/[firmId] (this app); replaces operator repo (Synapses-Firm crates/harness) until that source is inventoried"
+    architectures: [linux/amd64, linux/arm64]
+    capabilities: [harness.run, harness.spawn, inference.openai_compat]
+    deploys_to: [local, hf-space]
+    env_required: [STATE_DIR]
+    secrets: []
+    health: "GET /health returns 200 when the firm constitution is loaded"
+    state_mount: /state
+  - id: firm-gateway
+    status: unverified
+    source: "operator repo (Synapses-Firm docker/gateway.Dockerfile, per chat); confirm in inventory"
+    architectures: []
+    capabilities: [mcp.gateway]
+    deploys_to: [local, hf-space]
+    env_required: []
+    secrets: []
+    health: "UNKNOWN until inventory"
+  - id: firm-agentos
+    status: unverified
+    source: "operator repo (AgentOS, per chat); confirm in inventory"
+    architectures: []
+    capabilities: [agent.shell]
+    deploys_to: [local, hf-space]
+    env_required: []
+    secrets: []
+    health: "UNKNOWN until inventory"
+  - id: firm-ui
+    status: unverified
+    source: "operator repo; confirm in inventory"
+    architectures: []
+    capabilities: [ui.dashboard]
+    deploys_to: [local, hf-space]
+    env_required: []
+    secrets: []
+    health: "UNKNOWN until inventory"
+  - id: firm-humanoid
+    status: unverified
+    source: "operator repo (humanoid-mcp / daemon); needs a display"
+    architectures: []
+    capabilities: [screen.automation]
+    deploys_to: [local]
+    env_required: []
+    secrets: []
+    health: "UNKNOWN until inventory"

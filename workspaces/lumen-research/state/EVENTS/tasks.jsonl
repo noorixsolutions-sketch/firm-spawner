@@ -1,0 +1,5 @@
+{"ts":"2026-11-04T10:23:17.252Z","event":"task.received","task_id":"verify-1","type":"job"}
+{"ts":"2026-11-04T10:23:18.569Z","event":"task.received","task_id":"verify-gov","type":"job"}
+{"ts":"2026-11-04T10:23:18.750Z","event":"task.received","task_id":"verify-gov","type":"job"}
+{"ts":"2026-11-04T10:23:18.930Z","event":"task.received","task_id":"verify-gov","type":"job"}
+{"ts":"2026-11-04T10:23:19.411Z","event":"task.received","task_id":"verify-3","type":"echo"}

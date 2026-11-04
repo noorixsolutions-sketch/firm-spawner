@@ -1,0 +1,33 @@
+# Local fleet. The harness image comes from the inventory (source: existing repo); set HARNESS_IMAGE.
+name: "{{firm.id}}"
+services:
+  harness:
+    image: ${HARNESS_IMAGE:?set HARNESS_IMAGE from versions.lock}
+    environment:
+      STATE_DIR: /state
+    volumes: [state:/state]
+    ports: ["8080:8080"]
+  worker:
+    build: ../images/worker
+    environment:
+      HARNESS_BASE_URL: "{{harness.base_url}}"
+      FIRM_IDLE_EXIT: "{{deploy.idle_exit_seconds}}"
+      FIRM_WORKER_ID: "{{firm.id}}-local"
+    volumes: [state:/state]
+    depends_on: [harness]
+  inference:
+    profiles: [gpu]
+    build:
+      context: ../images/inference
+      args: { LLAMA_CPP_REF: "${LLAMA_CPP_REF:?pin a ref}" }
+    environment:
+      MODEL_REPO: "{{inference.model_repo}}"
+      MODEL_FILE: "{{inference.model_file}}"
+      FIRM_CTX: "{{inference.ctx}}"
+      HF_TOKEN: ${HF_TOKEN:-}
+    volumes: [models:/models]
+    ports: ["8000:8000"]
+    deploy: { resources: { reservations: { devices: [{ capabilities: [gpu] }] } } }
+volumes:
+  state:
+  models:

@@ -1,0 +1,9 @@
+# Agent definition schema (validated by scripts/validate.py).
+id: orchestrator
+role: Splits incoming work into tasks, assigns them, reviews results.
+responsibilities:
+  - Maintain the task queue under /state/queue
+  - Review worker results before they are marked done
+plugins: [state.store]
+permissions: [read_state, write_state]
+reports_to: human

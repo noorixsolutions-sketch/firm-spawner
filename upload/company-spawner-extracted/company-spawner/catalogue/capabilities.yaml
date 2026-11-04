@@ -1,0 +1,29 @@
+# Capabilities a firm can require, independent of provider. Provider choice binds to one of these.
+# execution classes: persistent_service | interactive_api | batch_worker | ephemeral_notebook
+capabilities:
+  inference:
+    contract: "OpenAI-compatible /v1/chat/completions"
+    implementations:
+      - { kind: hosted_api,       execution: interactive_api,    note: "provider free tier; quotas apply" }
+      - { kind: self_hosted_gpu,  execution: batch_worker,       note: "firm-inference on Kaggle/Colab session; ephemeral" }
+      - { kind: self_hosted_hf_job, execution: persistent_service, note: "HF Job needs GPU hardware; verify free eligibility first" }
+  state_storage:
+    contract: "POSIX path /state per LAYOUT.md"
+    implementations:
+      - { kind: hf_bucket_mount,  execution: persistent_service, note: "Spaces/Jobs volume mount" }
+      - { kind: hf_bucket_sync,   execution: batch_worker,       note: "hf sync mirror on Colab/Kaggle; partitioned queues" }
+      - { kind: local_volume,     execution: persistent_service, note: "docker volume, local only" }
+  control_plane_hosting:
+    contract: "HTTP service reachable by workers"
+    implementations:
+      - { kind: hf_space_docker,  execution: persistent_service, note: "free CPU basic; sleeps when idle" }
+      - { kind: local,            execution: persistent_service, note: "needs always-on machine" }
+  batch_compute:
+    contract: "task drain via firm-worker"
+    implementations:
+      - { kind: kaggle_notebook,  execution: ephemeral_notebook, note: "scheduled runs; weekly GPU quota; terms limit serving" }
+      - { kind: colab_notebook,   execution: ephemeral_notebook, note: "interactive, runtime limits; no scheduling" }
+      - { kind: hf_job,           execution: batch_worker,       note: "verify free eligibility" }
+rules:
+  - "ephemeral_notebook must never be described or bound as persistent production serving"
+  - "a capability binding needs an evidence record that passes scripts/eligibility.py"
