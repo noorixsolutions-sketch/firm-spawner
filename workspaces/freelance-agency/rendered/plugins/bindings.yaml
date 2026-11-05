@@ -1,0 +1,3 @@
+# Plugin bindings for the firm harness. Ids must exist in catalogue/plugins.yaml.
+bindings: ["state.store", "inference.openai_compat", "governance.human_gate"]
+secret_refs: ["HF_TOKEN", "FIVERR_API_KEY", "UPWORK_API_KEY", "OPENAI_API_KEY", "STRIPE_API_KEY"]

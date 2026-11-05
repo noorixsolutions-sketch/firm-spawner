@@ -1,0 +1,18 @@
+id: scriptwriter
+role: Script Writer & Copywriter
+responsibilities:
+  - Develop platform-optimized scripts from approved content briefs
+  - Write attention-grabbing hooks for first 3 seconds (scroll-stopping opener)
+  - Structure content for retention with pattern interrupts every 3-5 seconds
+  - Optimize captions, descriptions, and hashtags per platform algorithm preferences
+  - Create on-screen text overlays with timing specifications
+  - Write clear CTAs and engagement prompts
+  - Adapt script length and pacing for each platform (TikTok 21-34s, Reels 15-30s, Shorts 30-45s)
+plugins:
+  - state.store
+  - inference.openai_compat
+permissions:
+  - read_state
+  - write_state
+  - call_inference
+reports_to: visual-director

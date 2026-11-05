@@ -1,0 +1,12 @@
+id: sentiment-monitor
+role: Tracks market sentiment from news, social media, and on-chain data.
+responsibilities:
+  - Monitor crypto Twitter, Reddit, and Telegram for sentiment shifts
+  - Track news sentiment from financial media and press releases
+  - Analyze on-chain metrics like active addresses and transaction volume
+  - Detect FUD and FOMO cycles that drive short-term volatility
+  - Identify emerging narratives and sector trends
+  - Alert market-analyst of major sentiment changes
+plugins: [state.store, inference.openai_compat]
+permissions: [read_state, write_state, call_inference, web_scraping]
+reports_to: market-analyst

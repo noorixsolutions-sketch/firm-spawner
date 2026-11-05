@@ -1,0 +1,12 @@
+id: work-executor
+role: Executes accepted jobs and generates deliverables.
+responsibilities:
+  - Execute accepted jobs based on service type
+  - Break complex projects into milestones
+  - Generate work output using domain-specific tools
+  - Request clarification from clients on ambiguous requirements
+  - Integrate feedback loops for revisions
+  - Flag work requiring specialized human expertise
+plugins: [inference.openai_compat, state.store, governance.human_gate]
+permissions: [read_state, write_state, call_inference, execute_work]
+reports_to: proposal-writer

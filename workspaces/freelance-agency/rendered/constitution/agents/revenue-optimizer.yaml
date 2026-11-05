@@ -1,0 +1,12 @@
+id: revenue-optimizer
+role: Tracks KPIs and optimizes business strategy.
+responsibilities:
+  - Track KPIs including acceptance rate, avg job value, completion time
+  - Analyze which job categories yield highest ROI
+  - Optimize bidding strategy based on win rate data
+  - Identify bottlenecks in the pipeline
+  - Recommend service portfolio adjustments
+  - Generate weekly performance reports
+plugins: [state.store]
+permissions: [read_state, write_state, analytics]
+reports_to: human

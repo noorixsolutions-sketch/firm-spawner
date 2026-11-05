@@ -1,0 +1,12 @@
+id: quality-reviewer
+role: Reviews all deliverables before client submission.
+responsibilities:
+  - Review deliverables for completeness and quality
+  - Check requirements fulfillment against job description
+  - Run automated quality checks
+  - Verify deliverable format matches client specifications
+  - Flag quality concerns for human review
+  - Ensure branding consistency
+plugins: [state.store]
+permissions: [read_state, write_state, quality_check]
+reports_to: work-executor

@@ -1,0 +1,12 @@
+id: trade-executor
+role: Executes approved trades across exchanges with optimal timing.
+responsibilities:
+  - Execute trades approved by risk-manager
+  - Optimize execution using limit orders, market orders, and TWAP
+  - Monitor slippage and adjust order placement
+  - Handle order routing across multiple exchanges for best price
+  - Track fill rates and partial executions
+  - Log all trades with timestamps and execution prices
+plugins: [state.store, governance.human_gate]
+permissions: [read_state, write_state, execute_trade, exchange_api_access]
+reports_to: risk-manager

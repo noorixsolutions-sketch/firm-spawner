@@ -1,0 +1,11 @@
+# Firm charter. Business content is model-authored per firm and lives ONLY in this
+# file and agents/*.yaml, never in images.
+firm_id: "freelance-agency"
+name: "Freelance Agency Co"
+purpose: "Autonomous freelance marketplace automation for Fiverr and Upwork - job discovery, proposal generation, work execution, delivery, and client communication with human-in-loop only for critical decisions."
+owner: "freelance-agency@example.com"
+policy:
+  allow_paid: false
+  human_approval_required_for: [spend, external_publish, credential_change, destructive_action]
+runtime: "prime-agent"
+state_bucket: "file:///home/z/my-project/workspaces/freelance-agency/state"

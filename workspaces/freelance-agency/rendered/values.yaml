@@ -1,0 +1,38 @@
+firm:
+  id: freelance-agency
+  name: Freelance Agency Co
+  purpose: Autonomous freelance marketplace automation for Fiverr and Upwork - job discovery, proposal generation, work execution, delivery, and client communication with human-in-loop only for critical decisions.
+  owner_gmail: freelance-agency@example.com
+  repo: freelance-agency/freelance-agency
+  commit: main
+policy:
+  allow_paid: false
+state:
+  state_bucket: file:///home/z/my-project/workspaces/freelance-agency/state
+  models_bucket: ""
+inference:
+  enabled: true
+  backend: llama.cpp
+  model_repo: TheBloke/CodeLlama-13B-Instruct-GGUF
+  model_file: codellama-13b-instruct.Q4_K_M.gguf
+  llama_cpp_ref: b3906
+  ctx: 8192
+model_plane:
+  backends: [workspace-llm]
+harness:
+  runtime: prime-agent
+  base_url: http://localhost:3000/api/harness/firms/freelance-agency
+deploy:
+  control_target: local
+  worker_targets: [local, kaggle]
+  colab_workers: 0
+  kaggle_workers: 2
+  kaggle_schedule: "0 */4 * * *"
+  hf_space_hardware: cpu-basic
+  idle_exit_seconds: 300
+agents:
+  files: [job-scout.yaml, proposal-writer.yaml, work-executor.yaml, quality-reviewer.yaml, client-manager.yaml, revenue-optimizer.yaml]
+plugins:
+  bindings: [state.store, inference.openai_compat, governance.human_gate]
+secrets:
+  required: [HF_TOKEN, FIVERR_API_KEY, UPWORK_API_KEY, OPENAI_API_KEY, STRIPE_API_KEY]

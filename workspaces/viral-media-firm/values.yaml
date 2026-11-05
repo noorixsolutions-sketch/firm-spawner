@@ -1,0 +1,38 @@
+firm:
+  id: viral-media-firm
+  name: Viral Media Co
+  purpose: Autonomous viral content generation across TikTok, Instagram, YouTube Shorts, Twitter, and LinkedIn with trend monitoring, content ideation, scriptwriting, distribution, and performance analytics.
+  owner_gmail: viral-media-firm@example.com
+  repo: viral-media-firm/viral-media-firm
+  commit: main
+policy:
+  allow_paid: false
+state:
+  state_bucket: file:///home/z/my-project/workspaces/viral-media-firm/state
+  models_bucket: ""
+inference:
+  enabled: true
+  backend: llama.cpp
+  model_repo: TheBloke/Mistral-7B-Instruct-v0.2-GGUF
+  model_file: mistral-7b-instruct-v0.2.Q4_K_M.gguf
+  llama_cpp_ref: b3906
+  ctx: 8192
+model_plane:
+  backends: [workspace-llm]
+harness:
+  runtime: prime-agent
+  base_url: http://localhost:3000/api/harness/firms/viral-media-firm
+deploy:
+  control_target: local
+  worker_targets: [local, kaggle]
+  colab_workers: 0
+  kaggle_workers: 2
+  kaggle_schedule: "0 */6 * * *"
+  hf_space_hardware: cpu-basic
+  idle_exit_seconds: 300
+agents:
+  files: [trend-scout.yaml, content-ideator.yaml, scriptwriter.yaml, visual-director.yaml, distributor.yaml, analytics-reviewer.yaml]
+plugins:
+  bindings: [state.store, inference.openai_compat, governance.human_gate]
+secrets:
+  required: [HF_TOKEN, TIKTOK_API_KEY, INSTAGRAM_ACCESS_TOKEN, YOUTUBE_API_KEY, TWITTER_API_KEY, LINKEDIN_ACCESS_TOKEN, OPENAI_API_KEY]

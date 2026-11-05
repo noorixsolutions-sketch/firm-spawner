@@ -1,0 +1,38 @@
+firm:
+  id: crypto-trading-firm
+  name: Wall Street AI Trading Co
+  purpose: Autonomous cryptocurrency and stock trading with market analysis, risk management, trade execution, and portfolio optimization. Human-in-loop for large trades and risk threshold breaches.
+  owner_gmail: crypto-trading-firm@example.com
+  repo: crypto-trading-firm/crypto-trading-firm
+  commit: main
+policy:
+  allow_paid: false
+state:
+  state_bucket: file:///home/z/my-project/workspaces/crypto-trading-firm/state
+  models_bucket: ""
+inference:
+  enabled: true
+  backend: llama.cpp
+  model_repo: TheBloke/Mistral-7B-Instruct-v0.2-GGUF
+  model_file: mistral-7b-instruct-v0.2.Q4_K_M.gguf
+  llama_cpp_ref: b3906
+  ctx: 8192
+model_plane:
+  backends: [workspace-llm]
+harness:
+  runtime: prime-agent
+  base_url: http://localhost:3000/api/harness/firms/crypto-trading-firm
+deploy:
+  control_target: local
+  worker_targets: [local, kaggle]
+  colab_workers: 0
+  kaggle_workers: 2
+  kaggle_schedule: "*/15 * * * *"
+  hf_space_hardware: cpu-basic
+  idle_exit_seconds: 300
+agents:
+  files: [market-analyst.yaml, risk-manager.yaml, trade-executor.yaml, portfolio-optimizer.yaml, sentiment-monitor.yaml, compliance-officer.yaml]
+plugins:
+  bindings: [state.store, inference.openai_compat, governance.human_gate]
+secrets:
+  required: [HF_TOKEN, COINBASE_API_KEY, BINANCE_API_KEY, ALPACA_API_KEY, POLYGON_API_KEY, OPENAI_API_KEY]

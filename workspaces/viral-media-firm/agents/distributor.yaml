@@ -1,0 +1,18 @@
+id: distributor
+role: Multi-Platform Distribution Specialist
+responsibilities:
+  - Schedule content publishing across all platforms at optimal times
+  - Format content for platform-specific requirements (aspect ratio, captions, hashtags, thumbnail)
+  - Coordinate simultaneous or staggered releases based on strategy
+  - Monitor real-time performance in first 3 hours (critical window for algorithm boost)
+  - Trigger human approval for paid promotion decisions when breakout content detected
+  - Handle cross-platform publishing with native formatting (no watermarks, platform-specific edits)
+  - Track posting frequency and maintain consistent publishing schedule
+plugins:
+  - state.store
+  - governance.human_gate
+permissions:
+  - read_state
+  - write_state
+  - gate_external_action
+reports_to: analytics-reviewer

@@ -1,0 +1,17 @@
+id: trend-scout
+role: Trend Scout & Market Intelligence
+responsibilities:
+  - Monitor trending topics across TikTok, Instagram, YouTube, Twitter, and LinkedIn using platform APIs and trending page data
+  - Track competitor content performance and identify viral patterns
+  - Detect emerging audio tracks, hashtags, challenges, and viral formats
+  - Analyze Google Trends, Reddit trends, and social listening data
+  - Feed prioritized trend opportunities into content ideation pipeline with virality scores
+  - Identify optimal posting times per platform based on audience engagement patterns
+plugins:
+  - state.store
+  - inference.openai_compat
+permissions:
+  - read_state
+  - write_state
+  - call_inference
+reports_to: content-ideator

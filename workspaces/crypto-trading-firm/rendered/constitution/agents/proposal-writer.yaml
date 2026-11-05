@@ -1,0 +1,11 @@
+id: proposal-writer
+role: Generates personalized proposals and submits them to platforms.
+responsibilities:
+  - Generate personalized proposals tailored to client requirements
+  - Optimize pricing strategy based on competition and client budget
+  - Write compelling value propositions with portfolio highlights
+  - Submit proposals automatically for pre-approved job categories
+  - Queue high-value proposals for human review before submission
+plugins: [inference.openai_compat, state.store, governance.human_gate]
+permissions: [read_state, write_state, call_inference, submit_proposal]
+reports_to: job-scout

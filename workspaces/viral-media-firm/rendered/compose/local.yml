@@ -1,0 +1,33 @@
+# Local fleet. The harness image comes from the inventory (source: existing repo); set HARNESS_IMAGE.
+name: "viral-media-firm"
+services:
+  harness:
+    image: ${HARNESS_IMAGE:?set HARNESS_IMAGE from versions.lock}
+    environment:
+      STATE_DIR: /state
+    volumes: [state:/state]
+    ports: ["8080:8080"]
+  worker:
+    build: ../images/worker
+    environment:
+      HARNESS_BASE_URL: "http://localhost:3000/api/harness/firms/viral-media-firm"
+      FIRM_IDLE_EXIT: "300"
+      FIRM_WORKER_ID: "viral-media-firm-local"
+    volumes: [state:/state]
+    depends_on: [harness]
+  inference:
+    profiles: [gpu]
+    build:
+      context: ../images/inference
+      args: { LLAMA_CPP_REF: "${LLAMA_CPP_REF:?pin a ref}" }
+    environment:
+      MODEL_REPO: "TheBloke/Mistral-7B-Instruct-v0.2-GGUF"
+      MODEL_FILE: "mistral-7b-instruct-v0.2.Q4_K_M.gguf"
+      FIRM_CTX: "8192"
+      HF_TOKEN: ${HF_TOKEN:-}
+    volumes: [models:/models]
+    ports: ["8000:8000"]
+    deploy: { resources: { reservations: { devices: [{ capabilities: [gpu] }] } } }
+volumes:
+  state:
+  models:

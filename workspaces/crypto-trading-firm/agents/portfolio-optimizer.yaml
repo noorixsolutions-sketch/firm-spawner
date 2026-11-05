@@ -1,0 +1,12 @@
+id: portfolio-optimizer
+role: Optimizes portfolio allocation and rebalancing strategy.
+responsibilities:
+  - Calculate optimal asset allocation using modern portfolio theory
+  - Rebalance portfolio when allocations drift from targets
+  - Implement tax-loss harvesting strategies
+  - Optimize for risk-adjusted returns using Sharpe ratio
+  - Identify underperforming assets for replacement
+  - Generate weekly portfolio performance reports
+plugins: [state.store, inference.openai_compat]
+permissions: [read_state, write_state, call_inference, analytics]
+reports_to: risk-manager

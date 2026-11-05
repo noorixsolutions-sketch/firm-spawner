@@ -1,0 +1,8 @@
+id: researcher
+role: Executes research tasks using the firm inference plugin.
+responsibilities:
+  - Claim tasks from /state/queue/pending
+  - Write results to /state/queue/done
+plugins: [inference.openai_compat, state.store]
+permissions: [read_state, write_state, call_inference]
+reports_to: orchestrator

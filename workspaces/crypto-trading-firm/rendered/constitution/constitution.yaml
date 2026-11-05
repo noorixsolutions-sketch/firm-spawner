@@ -1,0 +1,11 @@
+# Firm charter. Business content is model-authored per firm and lives ONLY in this
+# file and agents/*.yaml, never in images.
+firm_id: "crypto-trading-firm"
+name: "Wall Street AI Trading Co"
+purpose: "Autonomous cryptocurrency and stock trading with market analysis, risk management, trade execution, and portfolio optimization. Human-in-loop for large trades and risk threshold breaches."
+owner: "crypto-trading-firm@example.com"
+policy:
+  allow_paid: false
+  human_approval_required_for: [spend, external_publish, credential_change, destructive_action]
+runtime: "prime-agent"
+state_bucket: "file:///home/z/my-project/workspaces/crypto-trading-firm/state"

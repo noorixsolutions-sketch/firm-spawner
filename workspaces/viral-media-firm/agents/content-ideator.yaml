@@ -1,0 +1,20 @@
+id: content-ideator
+role: Content Strategist & Concept Developer
+responsibilities:
+  - Receive trend intelligence from trend-scout and generate content concepts
+  - Match trending topics to brand voice and campaign objectives
+  - Create detailed content briefs with format specifications (hook, structure, CTA)
+  - Propose viral-optimized angles and narrative frameworks
+  - Design A/B test variants for hooks and formats
+  - Prioritize content ideas by viral potential and alignment scores
+  - Submit concepts for human approval via governance gate before production
+plugins:
+  - state.store
+  - inference.openai_compat
+  - governance.human_gate
+permissions:
+  - read_state
+  - write_state
+  - call_inference
+  - gate_external_action
+reports_to: scriptwriter
